@@ -1,0 +1,31 @@
+.App {
+  text-align: center;
+}
+ul{
+  list-style: none;
+}
+.red{
+  background-color: red;
+}
+.yellow{
+  background-color: yellow;
+}
+.pink{
+  background-color: palevioletred;
+}
+/* Footer */
+.footer_style{
+  position: absolute;
+  bottom: 0%;
+}
+/* SignIn and SignUP */
+.grid-container{
+
+  width: 30vw;
+  display: grid;
+  grid-template-columns: auto;
+  row-gap: 15px;
+}
+.marginBtm {
+margin-bottom: 3em;
+}

@@ -15,95 +15,13 @@ import { omit } from "lodash";
 
 import { Paper } from "@mui/material";
 function AddProducts() {
-  
   //form validation
-  const validate = (e, name, value) => {
+
     //A function to validate each input values
 
-    switch (name) {
-      case "productName":
-        if (value===null) {
-          // we will set the error state
-
-          setErrors({
-            ...errors,
-            productName: "Enter dish name",
-          });
-        } else {
-          // set the error state empty or remove the error for username input
-
-          //omit function removes/omits the value from given object and returns a new object
-          let newObj = omit(errors, "productName");
-          setErrors(newObj);
-        }
-        break;
-      case "price":
-        if (value.length === null) {
-          // we will set the error state
-
-          setErrors({
-            ...errors,
-            price: "Enter price",
-          });
-        } else {
-          // set the error state empty or remove the error for username input
-
-          //omit function removes/omits the value from given object and returns a new object
-          let newObj = omit(errors, "price");
-          setErrors(newObj);
-        }
-        break;
-
-        // case 'email':
-        //     if(
-        //         !new RegExp( /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(value)
-        //     ){
-        //         setErrors({
-        //             ...errors,
-        //             email:'Enter a valid email address'
-        //         })
-        //     }else{
-
-        //         let newObj = omit(errors, "email");
-        //         setErrors(newObj);
-
-        //     }
-        // break;
-
-        // case 'password':
-        // if (
-        //   !new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/).test(value)
-        // ) {
-        //   setErrors({
-        //     ...errors,
-        //     password:
-        //       "Password should contains atleast 8 charaters and containing uppercase,lowercase and numbers",
-        //   });
-        // } else {
-        //   let newObj = omit(errors, "password");
-        //   setErrors(newObj);
-        // }
-        // break;
-
-      default:
-        break;
-    }
-  };
-  //form values
-  const [values, setValues] = useState({});
-  //form errors
-  const [errors, setErrors] = useState({});
-  const formValidate = (e) => {
-    e.persist();
-    let name = e.target.name;
-    let val = e.target.value;
-    validate(e, name, val);
-    setValues({
-      ...values,
-      [name]: val,
-    });
     
-  };
+  
+  
   //others
   const auth = localStorage.getItem("users");
   var userId = JSON.parse(auth)._id;
@@ -111,24 +29,27 @@ function AddProducts() {
   const [deliveryType, setDeliverType] = useState("");
   const [dishName, setProduct] = useState("");
   const [price, setPrice] = useState("");
-  const insertProducts = async(e) => {
-    setProduct(values.productName)
-    setPrice(values.price)
+  const [image, setImage] = useState("");
+
+  const insertProducts = async () => {
    
-    if (e) e.preventDefault();
-console.log("values",Object.keys(values))
-    if (Object.keys(errors).length === 0 && (values.productName && values.price) !== null) {
+
+     
       let response = await fetch("http://localhost:4200/addProduct", {
-      method: "post",
-      body: JSON.stringify({ category, deliveryType, dishName, price, userId }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(await response.json());
-    } else {
-      alert("Please enter values");
-    }
+        method: "post",
+        body: JSON.stringify({
+          category,
+          deliveryType,
+          dishName,
+          price,
+          userId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(await response.json());
+   
   };
   const handleChange = (e) => {
     setCategory(e.target.value);
@@ -165,11 +86,10 @@ console.log("values",Object.keys(values))
                       variant="standard"
                       fullWidth
                       name="productName"
-                      
-                      // onChange={(e) => setProduct(e.target.value)}
-                      onChange={formValidate}
+                      onChange={(e) => setProduct(e.target.value)}
+                     
                     />
-                    {errors.productName && <h3>{errors.productName}</h3>}
+                   
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -179,8 +99,20 @@ console.log("values",Object.keys(values))
                       placeholder="Digits only"
                       name="price"
                       fullWidth
+                       onChange={(e) => setPrice(e.target.value)}
+                     
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      type="file"
+                      label="Image"
+                      variant="standard"
+                     
+                      name="image"
+                      fullWidth
                       // onChange={(e) => setPrice(e.target.value)}
-                      onChange={formValidate}
+                      
                     />
                   </Grid>
                   <Grid item xs={12}>

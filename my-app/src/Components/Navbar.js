@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 import {
   AppBar,
   Button,
@@ -71,7 +70,7 @@ function Navbar() {
                 {auth ? (
                   <>
                     <Typography sx={{ color: "red" }}>
-                      {JSON.parse(auth).username}
+                     {JSON.parse(auth).username} 
                     </Typography>
 
                     <Link to="/signUp" onClick={logout}>

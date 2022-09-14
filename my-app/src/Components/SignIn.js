@@ -15,10 +15,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Paper } from "@mui/material";
-
+import { Paper, InputAdornment, IconButton } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 export default function SignIn() {
-
   const navigate = useNavigate();
   useEffect(() => {
     const auth = localStorage.getItem("users");
@@ -28,30 +29,34 @@ export default function SignIn() {
   }, []);
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
-
+  const [checkPass, setCheckPass] = useState({
+    visible: false,
+  });
+  const passState = () => {
+    setCheckPass({
+      visible: !checkPass.visible,
+    });
+  };
   const handleSubmit = async () => {
     let sendData = await fetch("http://localhost:4200/login", {
       method: "post",
       //   body: JSON.stringify(val.username,val.email,val.pass,val.city),
-      body: JSON.stringify({  email, password}),
+      body: JSON.stringify({ email, password }),
 
       headers: {
         "Content-Type": "application/json",
       },
     });
     sendData = await sendData.json();
+    console.log("sendData", sendData);
 
-    if(sendData.email)
-    {
+    if (sendData.email) {
       localStorage.setItem("users", JSON.stringify(sendData));
 
-      navigate("/")
+      navigate("/");
+    } else {
+      alert("Incorrect username or passowrd");
     }
-    else{
-      alert("Incorrect username or passowrd")
-    }
-    console.log("sendData",sendData);
-
   };
   return (
     <Grid container>
@@ -76,7 +81,6 @@ export default function SignIn() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                   
                     type="email"
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -84,6 +88,13 @@ export default function SignIn() {
                     label="email address"
                     variant="standard"
                     fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -91,10 +102,23 @@ export default function SignIn() {
                     onChange={(e) => {
                       setPass(e.target.value);
                     }}
-                    type="password"
+                    type={!checkPass.visible ? "password" : "text"}
                     label="password"
                     variant="standard"
                     fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={passState}>
+                            {checkPass.visible ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
               </Grid>
